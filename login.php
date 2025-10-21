@@ -5,25 +5,22 @@ if(isset($_POST["login"])){
 
     $username = $_POST["username"];
     $password = $_POST["password"];
-    $role = $_POST["role"];
 
-    $query = "SELECT * FROM user WHERE username = '$username' AND password = '$password' AND role = '$role'";
+    $query = "SELECT * FROM user WHERE username = '$username' AND password = '$password'";
     $result = mysqli_query($koneksi, $query);
 
-    if ($result && mysqli_num_rows($result) > 0){
-        $user = mysqli_fetch_assoc($result);
+    if ($user = mysqli_fetch_assoc($result)) {
+        $_SESSION['id_user']  = $user['id_user'];
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['role']     = $user['role'];
 
-        $_SESSION["id_user"] = $user["id_user"];
-        $_SESSION["username"] = $user["username"];
-        $_SESSION["role"] = $user["role"];
-
-    if($user["role"] == "admin"){
-        header("Location: dashboard_admin.php");
-    }   else    {
-        header("Location: dashboard_kasir.php");
-    }
+        if($user["role"] == "admin"){
+            header("Location: dashboard_admin.php");
+        } else {
+            header("Location: dashboard_kasir.php");
+        }
         exit;
-    }   else    {
+    } else {
         $error = "Username atau Password salah!";
         echo "<script>alert('$error'); window.location.href='login.php';</script>";
     }
@@ -41,15 +38,10 @@ if(isset($_POST["login"])){
     <h2>Login Kasir Mini</h2>
     <form method="post">
         <label>Username :</label>
-        <input type="text" id="username" name="username">
-        <label>Password</label>
-        <input type="password" id="password" name="password">
+        <input type="text" id="username" name="username" required><br><br>
+        <label>Password :</label>
+        <input type="password" id="password" name="password" required><br><br>
         <button type="submit" name="login">Login</button>
-        <label>Role :</label>
-        <select name="role">
-        <option value="kasir">Kasir</option>
-        <option value="admin">Admin</option>
-        </select>
     </form>
 </body>
 </html>

@@ -1,5 +1,7 @@
 <?php
 include_once("ceklogin.php");
+include_once("koneksi.php");
+cekKasir();
 ?>
 
 <!DOCTYPE html>
